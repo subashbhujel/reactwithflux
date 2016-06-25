@@ -73,4 +73,3 @@ gulp.task('watch',function(){
 
 // Default task that will run when 'gulp' is run from git bash
 gulp.task('default',['html','js','css','open','watch']);
-//gulp.task('default',['html','js','css','watch']);
