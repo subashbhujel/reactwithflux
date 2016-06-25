@@ -1,16 +1,26 @@
 "use strict";
 
 var gulp = require('gulp');
-var connect = require('gulp-connect');
-var open = require('gulp-open');
+var connect = require('gulp-connect'); // runs a local dev server
+var open = require('gulp-open'); // open a file in web brower
+var browserify  = require('browserify'); // Bundle JS
+var reactify = require('reactify'); // Transforms React Jsx -> Js
+var source = require('vinyl-source-stream'); // use conventional text streams with gulp
+var concat = require('gulp-concat'); //concats file
 
 // config setting for localhost
 var config = {
 	port:9005,
-	devBaseUrl: 'https://localhost',
+	devBaseUrl: 'http://localhost',
 	paths:{
 		html:'./src/*.html',
-		dist:'./dist'
+		js: './src/**/.js',
+		css: [
+			'node_modules/bootstrap/dist/css/bootstrap.min.css',
+			'node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
+		],
+		dist:'./dist',
+		mainJs: './src/main.js'
 	}
 }
 
@@ -37,10 +47,30 @@ gulp.task('html',function(){
 		.pipe(connect.reload());
 });
 
+// copies html files to sources
+gulp.task('js',function(){
+	browserify(config.paths.mainJs)
+		.transform(reactify)
+		.bundle()
+		.on('error',console.error.bind(console))
+		.pipe(source('bundle.js'))
+		.pipe(gulp.dest(config.paths.dist+'/scripts'))
+		.pipe(connect.reload());
+});
+
+// concats css files to sources
+gulp.task('css',function(){
+	gulp.src(config.paths.css)
+		.pipe(concat('bundle.css'))
+		.pipe(gulp.dest(config.paths.dist+'/css'));
+});		
+
 // Watches for any changes in html file and refreshes the page
 gulp.task('watch',function(){
 	gulp.watch(config.paths.html,['html'])
+	gulp.watch(config.paths.js,['js'])
 });
 
 // Default task that will run when 'gulp' is run from git bash
-gulp.task('default',['html','open','watch']);
+gulp.task('default',['html','js','css','open','watch']);
+//gulp.task('default',['html','js','css','watch']);
