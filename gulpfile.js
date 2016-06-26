@@ -15,6 +15,7 @@ var config = {
 	paths:{
 		html:'./src/*.html',
 		js: './src/**/.js',
+		images: './src/images/*',
 		css: [
 			'node_modules/bootstrap/dist/css/bootstrap.min.css',
 			'node_modules/bootstrap/dist/css/bootstrap-theme.min.css',
@@ -63,6 +64,17 @@ gulp.task('css',function(){
 	gulp.src(config.paths.css)
 		.pipe(concat('bundle.css'))
 		.pipe(gulp.dest(config.paths.dist+'/css'));
+});	
+
+// concats css files to sources
+gulp.task('images',function(){
+	gulp.src(config.paths.images)
+		.pipe(gulp.dest(config.paths.dist+'/images'))
+		.pipe(connect.reload());
+	
+	//publish favicon
+	gulp.src('.src/favicon.ico')
+		.pipe(gulp.dest(config.paths.dist));
 });		
 
 // Watches for any changes in html file and refreshes the page
@@ -71,5 +83,7 @@ gulp.task('watch',function(){
 	gulp.watch(config.paths.js,['js'])
 });
 
+
+
 // Default task that will run when 'gulp' is run from git bash
-gulp.task('default',['html','js','css','open','watch']);
+gulp.task('default',['html','js','css','images','open','watch']);
