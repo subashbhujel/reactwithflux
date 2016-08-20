@@ -3,6 +3,7 @@
 var React = require('react');
 
 var About = React.createClass({	
+	/*
 	statics: {
 		// Triggered when users tries to come to this page.
 		willTransitionTo: function (transition,params,query,callback) {
@@ -19,7 +20,7 @@ var About = React.createClass({
 			}
 			// No need to call a callback
 		}
-	},
+	},*/
 	render: function(){
 		return (
 			<div>

@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Router= require('react-router');
+
 var DefaultRoute = Router.DefaultRoute;
 var Route = Router.Route;
 var NotFoundRoute = Router.NotFoundRoute; // For 404 - page not found for all invalid urls
@@ -17,15 +18,15 @@ var routes = (
 		<DefaultRoute handler={require('./components/homePage')}/>
 		
 		<Route name="authors" handler={require('./components/author/authorPage')}/>
-		<Route name="about" handler={require('./components/about/aboutPage')}/>
+		<Route name="addAuthor" path="author" handler={require('./components/author/manageAuthorPage')}/>
+		<Route name="about" handler={require('./components/about/aboutPage')}/>		
 		
 		<NotFoundRoute handler={require('./components/notFoundPage')}/>
 		
 		<Redirect from="about-us" to="about"/> 
 		<Redirect from="about/*" to="about"/> 
 
-		<Redirect from="author" to="authors"/> 
-		<Redirect from="awthors" to="authors"/> 
+		<Redirect from="awthors" to="authors"/>  
 	</Route>
 );
 
