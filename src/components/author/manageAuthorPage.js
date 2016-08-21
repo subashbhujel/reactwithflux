@@ -84,11 +84,16 @@ var ManageAuthorPage = React.createClass({
 			return;
 		}
 
-		// call apo and save the date
-		// Commenting the line below to make use of FLUX Actions!
-		// AuthorApi.saveAuthor(this.state.author);
-		AuthorActions.createAuthor(this.state.author);
-
+		// Update the author if it already has an ID. Create otherwise.
+		if(this.state.author.id){
+			AuthorActions.updateAuthor(this.state.author);
+		}
+		else{
+			// call apo and save the date
+			// Commenting the line below to make use of FLUX Actions!
+			// AuthorApi.saveAuthor(this.state.author);
+			AuthorActions.createAuthor(this.state.author);
+		}
 		// Showing a dialog box that author is saved.
 		toastr.success('Toaster msg - Author saved.');
 

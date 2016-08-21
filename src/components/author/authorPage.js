@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Link = require('react-router').Link;
-var AuthorList = require('./authorList');
 
 // Disabling this to make use of Actions/Dispatcher/Stores = Flux!!
 // var AuthorApi = require('../../api/authorApi');
@@ -10,6 +9,7 @@ var AuthorList = require('./authorList');
 // FLUX - YEAH!!
 var AuthorStore = require('../../stores/authorStore');
 var AuthorActions = require('../../actions/authorActions');
+var AuthorList = require('./authorList');
 
 var AuthorPage = React.createClass({	
 		getInitialState: function(){
@@ -25,14 +25,28 @@ var AuthorPage = React.createClass({
 				this.setState({authors:AuthorApi.getAllAuthors()});
 			}
 		},*/
-		render:function(){	
-			return (
-				<div>
-					<h1>Authors</h1>
-					<Link to="addAuthor" className="btn btn-default">Add Author</Link>
-					<AuthorList authors={this.state.authors}/>
-				</div>
-			);
+
+	componentWillMount: function() {
+		AuthorStore.addChangeListener(this._onChange);
+	},
+
+	//Clean up when this component is unmounted
+	componentWillUnmount: function() {
+		AuthorStore.removeChangeListener(this._onChange);
+	},
+
+	_onChange: function() {
+		this.setState({ authors: AuthorStore.getAllAuthors() });
+	},
+
+	render:function(){	
+		return (
+			<div>
+				<h1>Authors</h1>
+				<Link to="addAuthor" className="btn btn-default">Add Author</Link>
+				<AuthorList authors={this.state.authors}/>
+			</div>
+		);
 	}
 });
 
